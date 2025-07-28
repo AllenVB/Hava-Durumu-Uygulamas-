@@ -1,7 +1,7 @@
 const cityInput = document.querySelector('#cityInput');
 const weatherForm = document.querySelector('#weatherForm');
 const weatherResult = document.querySelector('#weatherResult');
-const weaatherIcon = document.querySelector('.weather-icon');
+const weatherIcon = document.querySelector('.weather-icon');
 const temperature = document.querySelector('#temperature');
 const cityname = document.querySelector('#cityName');
 const description = document.querySelector('#description');
@@ -15,16 +15,16 @@ weatherForm.addEventListener('submit', async (e) => {
     }
 
     try {
-        const response = await fetch(`https://api.weatherapi.com/v1/current.json?key=f0ad2bd63ed07359e4d47ed692a0ba5c&q=${encodeURIComponent(city)}&lang=tr`);
+        const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=f0ad2bd63ed07359e4d47ed692a0ba5c&lang=tr`);
         if (!response.ok) {
             throw new Error('Şehir bulunamadı.');
         }
         const data = await response.json();
 
-        weaatherIcon.innerHTML = `<img src="https:${data.current.condition.icon}" alt="icon">`;
-        temperature.textContent = `${data.current.temp_c} °C`;
-        cityname.textContent = data.location.name;
-        description.textContent = data.current.condition.text;
+        weatherIcon.innerHTML = `<img src="https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png" alt="icon">`;
+        temperature.textContent = `${(data.main.temp - 273.15).toFixed(1)} °C`;
+        cityname.textContent = data.name;
+        description.textContent = data.weather[0].description;
 
         weatherResult.style.display = 'block';
     } catch (error) {
